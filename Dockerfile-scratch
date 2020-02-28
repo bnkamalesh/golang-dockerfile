@@ -1,0 +1,22 @@
+FROM golang:1.14 AS builder
+
+COPY ${PWD} /app
+WORKDIR /app
+
+# Toggle CGO on your app requirement
+RUN CGO_ENABLED=0 go build -ldflags '-extldflags "-static"' -o /app/appbin *.go
+# Use below 
+# RUN CGO_ENABLED=0 go build -ldflags '-extldflags "-static"' -o /app/appbin *.go
+
+FROM scratch
+LABEL MAINTAINER Author <author@example.com>
+
+COPY --from=builder /app /app
+
+WORKDIR /app
+# Since running as a non-root user, port bindings < 1024 are not possible
+# 8000 for HTTP; 8443 for HTTPS;
+EXPOSE 8000
+EXPOSE 8443
+
+CMD ["./appbin"]
