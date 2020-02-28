@@ -1,6 +1,6 @@
 # Go Dockerfile v0.1.0
 
-[Dockerfiles](https://docs.docker.com/engine/reference/builder/) which can be used to create [Docker image](https://docs.docker.com/engine/docker-overview/#docker-objects) image for your [Go](https://golang.org) app. It makes use of Docker's [multi-stage build feature](https://docs.docker.com/develop/develop-images/multistage-build/) to create the Go application binary, and then attach it to a minimal base image.
+[Dockerfiles](https://docs.docker.com/engine/reference/builder/) which can be used to create [Docker image](https://docs.docker.com/engine/docker-overview/#docker-objects) image for your [Go](https://golang.org) app. It makes use of Docker's [multi-stage build feature](https://docs.docker.com/develop/develop-images/multistage-build/) to create the Go application binary, and then attach it to a minimal base image. The Go version used is `1.14`, though it should work for most Go versions (not tested).
 
 There are 3 Dockerfiles provided
 
