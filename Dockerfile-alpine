@@ -3,10 +3,10 @@ FROM golang:1.14-alpine3.11 AS builder
 COPY ${PWD} /app
 WORKDIR /app
 
-# Toggle CGO on your app requirement
-RUN CGO_ENABLED=0 go build -ldflags '-extldflags "-static"' -o /app/appbin *.go
+# Toggle CGO based on your app requirement. CGO_ENABLED=1 for enabling CGO
+RUN CGO_ENABLED=0 go build -ldflags '-s -w -extldflags "-static"' -o /app/appbin *.go
 # Use below if using vendor
-# RUN CGO_ENABLED=0 go build -mod=vendor -ldflags '-extldflags "-static"' -o /app/appbin *.go
+# RUN CGO_ENABLED=0 go build -mod=vendor -ldflags '-s -w -extldflags "-static"' -o /app/appbin *.go
 
 FROM dibiz/alpine:3.11
 LABEL MAINTAINER Author <author@example.com>

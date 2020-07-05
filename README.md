@@ -1,6 +1,8 @@
-# Go Dockerfile v0.1.0
+<p align="center"><img src="https://user-images.githubusercontent.com/1092882/86526373-07f1d700-beb1-11ea-815b-934d2ea67e0a.png" alt="docker gopher" width="256px"/></p>
 
-[Dockerfiles](https://docs.docker.com/engine/reference/builder/) which can be used to create [Docker image](https://docs.docker.com/engine/docker-overview/#docker-objects) image for your [Go](https://golang.org) app. It makes use of Docker's [multi-stage build feature](https://docs.docker.com/develop/develop-images/multistage-build/) to create the Go application binary, and then attach it to a minimal base image. The Go version used is `1.14`, though it should work for most Go versions (not tested).
+# Go Dockerfile v0.1.2
+
+[Dockerfiles](https://docs.docker.com/engine/reference/builder/) to build [Docker images](https://docs.docker.com/engine/docker-overview/#docker-objects) for your [Go](https://golang.org) app. It makes use of Docker's [multi-stage build feature](https://docs.docker.com/develop/develop-images/multistage-build/) to create the Go application binary, and then attach it to a minimal base image. The Go version used is `1.14`, though it should work for most Go versions (not tested). You'll have to tweak the Dockerfile to `COPY` any static files required by the application, to be copied to the final image.
 
 There are 3 Dockerfiles provided
 
@@ -26,3 +28,7 @@ $ docker run -p 8080:8080 --rm -ti webgo-helloworld-alpine
 $ docker run -p 8080:8080 --rm -ti webgo-helloworld-debian
 $ docker run -p 8080:8080 --rm -ti webgo-helloworld-scratch
 ```
+
+## The gopher
+
+The gopher used here was created using [Gopherize.me](https://gopherize.me/). The expert Docker gopher tells us how to build production ready, secure, Docker images for Go applications! 
