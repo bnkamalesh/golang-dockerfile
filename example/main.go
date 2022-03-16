@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/bnkamalesh/webgo/v4/middleware"
-
-	"github.com/bnkamalesh/webgo/v4"
+	"github.com/bnkamalesh/webgo/v6"
+	"github.com/bnkamalesh/webgo/v6/middleware/accesslog"
+	"github.com/bnkamalesh/webgo/v6/middleware/cors"
 )
 
 func helloWorld(w http.ResponseWriter, r *http.Request) {
@@ -32,21 +32,21 @@ func chain(w http.ResponseWriter, r *http.Request) {
 
 func getRoutes() []*webgo.Route {
 	return []*webgo.Route{
-		&webgo.Route{
+		{
 			Name:          "root",                         // A label for the API/URI, this is not used anywhere.
 			Method:        http.MethodGet,                 // request type
 			Pattern:       "/",                            // Pattern for the route
 			Handlers:      []http.HandlerFunc{helloWorld}, // route handler
 			TrailingSlash: true,
 		},
-		&webgo.Route{
+		{
 			Name:          "matchall",                     // A label for the API/URI, this is not used anywhere.
 			Method:        http.MethodGet,                 // request type
 			Pattern:       "/matchall/:wildcard*",         // Pattern for the route
 			Handlers:      []http.HandlerFunc{helloWorld}, // route handler
 			TrailingSlash: true,
 		},
-		&webgo.Route{
+		{
 			Name:                    "api",                                 // A label for the API/URI, this is not used anywhere.
 			Method:                  http.MethodGet,                        // request type
 			Pattern:                 "/api/:param",                         // Pattern for the route
@@ -65,12 +65,17 @@ func main() {
 		WriteTimeout: 60 * time.Second,
 	}
 
-	router := webgo.NewRouter(cfg, getRoutes())
+	routes := getRoutes()
+	router := webgo.NewRouter(cfg, routes...)
 
-	router.UseOnSpecialHandlers(middleware.AccessLog)
+	router.UseOnSpecialHandlers(accesslog.AccessLog)
 
-	router.Use(middleware.AccessLog)
-	router.Use(middleware.CorsWrap())
+	router.Use(accesslog.AccessLog)
+	router.Use(cors.CORS(&cors.Config{
+		Routes:         routes,
+		AllowedOrigins: []string{"*"},
+		AllowedHeaders: []string{"*"},
+	}))
 
 	router.Start()
 }

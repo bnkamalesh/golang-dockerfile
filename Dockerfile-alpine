@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine3.12 AS builder
+FROM golang:1.18-alpine3.15 AS builder
 
 COPY ${PWD} /app
 WORKDIR /app
@@ -8,7 +8,7 @@ RUN CGO_ENABLED=0 go build -ldflags '-s -w -extldflags "-static"' -o /app/appbin
 # Use below if using vendor
 # RUN CGO_ENABLED=0 go build -mod=vendor -ldflags '-s -w -extldflags "-static"' -o /app/appbin *.go
 
-FROM alpine:3.12
+FROM alpine:3.15
 LABEL MAINTAINER Author <author@example.com>
 
 # Following commands are for installing CA certs (for proper functioning of HTTPS and other TLS)
