@@ -1,6 +1,6 @@
-FROM golang:1.22 AS builder
+FROM golang:1.25 AS builder
 
-COPY ${PWD} /app
+COPY . /app
 WORKDIR /app
 
 # Toggle CGO based on your app requirement. CGO_ENABLED=1 for enabling CGO
@@ -9,7 +9,7 @@ RUN CGO_ENABLED=0 go build -ldflags '-s -w -extldflags "-static"' -o /app/appbin
 # RUN CGO_ENABLED=0 go build -mod=vendor -ldflags '-s -w -extldflags "-static"' -o /app/appbin *.go
 
 FROM debian:stable-slim
-LABEL MAINTAINER Author <author@example.com>
+LABEL MAINTAINER="Author <author@example.com>"
 
 # Following commands are for installing CA certs (for proper functioning of HTTPS and other TLS)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -19,8 +19,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get autoremove -y && apt-get autoclean -y
 
 # Add new user 'appuser'. App should be run without root privileges as a security measure
-RUN adduser --home "/appuser" --disabled-password appuser \
-    --gecos "appuser,-,-,-"
+RUN useradd -m -d /appuser -s /bin/bash appuser
 USER appuser
 
 COPY --from=builder /app /home/appuser/app

@@ -1,6 +1,6 @@
-FROM golang:1.22 AS builder
+FROM golang:1.25 AS builder
 
-COPY ${PWD} /app
+COPY . /app
 WORKDIR /app
 
 # Toggle CGO based on your app requirement. CGO_ENABLED=1 for enabling CGO
@@ -8,8 +8,8 @@ RUN CGO_ENABLED=0 go build -ldflags '-s -w -extldflags "-static"' -o /app/appbin
 # Use below if using vendor
 # RUN CGO_ENABLED=0 go build -mod=vendor -ldflags '-s -w -extldflags "-static"' -o /app/appbin *.go
 
-FROM busybox:1.36
-LABEL MAINTAINER Author <author@example.com>
+FROM busybox:stable
+LABEL MAINTAINER="Author <author@example.com>"
 
 # Add new user 'appuser'. App should be run without root privileges as a security measure
 RUN adduser --home "/appuser" --disabled-password appuser \
